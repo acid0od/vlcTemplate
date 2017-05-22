@@ -1,0 +1,7 @@
+vlcTemplate.db.dbPrefix = jdbc:mysql://
+vlcTemplate.db.host = localhost
+vlcTemplate.db.port = 3306
+vlcTemplate.db.dbName = iptv_db
+vlcTemplate.db.driverName = com.mysql.jdbc.Driver
+vlcTemplate.db.username = username
+vlcTemplate.db.password = password
