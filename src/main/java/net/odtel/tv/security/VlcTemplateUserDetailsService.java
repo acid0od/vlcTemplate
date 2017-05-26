@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
-@Component
+//@Component
 public class VlcTemplateUserDetailsService implements UserDetailsService {
 
     @Override

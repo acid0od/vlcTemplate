@@ -3,12 +3,13 @@ package net.odtel.tv.service;
 import lombok.extern.slf4j.Slf4j;
 import net.odtel.tv.model.ChannelList;
 import net.odtel.tv.model.Server;
+import net.odtel.tv.model.UserAuth;
 import net.odtel.tv.repository.TVRepository;
+import net.odtel.tv.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -16,6 +17,17 @@ public class TvProgrammeService implements TvService {
     @Autowired
     private TVRepository tvRepository;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    
+    @Override
+    public TokenResponse getToken(UserAuth userAuth) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(jwtTokenUtil.CLAIM_KEY_USERNAME, "acid0od");
+        claims.put(jwtTokenUtil.CLAIM_KEY_CREATED, new Date());
+        return new TokenResponse(jwtTokenUtil.generateToken(claims));
+    }
+    
     @Override
     public String getAllTVProgrammes() {
         Random randomGenerator = new Random();

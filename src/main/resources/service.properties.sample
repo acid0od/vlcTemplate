@@ -5,3 +5,6 @@ vlcTemplate.db.dbName = iptv_db
 vlcTemplate.db.driverName = com.mysql.jdbc.Driver
 vlcTemplate.db.username = username
 vlcTemplate.db.password = password
+
+jwt.header = Bearer
+jwt.secret = secret012345678

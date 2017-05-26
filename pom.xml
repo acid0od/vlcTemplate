@@ -23,6 +23,7 @@
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
         <spring-security-config.version>4.2.2.RELEASE</spring-security-config.version>
         <jjwt.version>0.7.0</jjwt.version>
+        <spring-mobile-device.version>2.0.0.M1</spring-mobile-device.version>
     </properties>
 
     <dependencies>
@@ -77,6 +78,12 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.mobile</groupId>
+            <artifactId>spring-mobile-device</artifactId>
+            <version>${spring-mobile-device.version}</version>
         </dependency>
 
         <dependency>
