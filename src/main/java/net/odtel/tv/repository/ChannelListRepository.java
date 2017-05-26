@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import javax.xml.ws.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class ChannelListRepository implements TVRepository {
     public List<ChannelList> getAllChannels() {
         String sql = "SELECT id, ch_name, ch_altname, stream_address, aspect from chanel_list where not_working=0 and ch_status=1";
 
-        List<ChannelList> channelLists = jdbcTemplate.query(sql, new RowMapper<ChannelList>() {
+/*        List<ChannelList> channelLists = jdbcTemplate.query(sql, new RowMapper<ChannelList>() {
 
             @Override
             public ChannelList mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -41,16 +42,23 @@ public class ChannelListRepository implements TVRepository {
                 return channelList;
             }
 
-        });
+        });*/
 
-        return channelLists;
+        ChannelList channelList = new ChannelList();
+        channelList.setAspect("aspect");
+        channelList.setName("name");
+        channelList.setStreamAddress("streamAddress");
+        channelList.setId(11L);
+        channelList.setUrl("url");
+        return Collections.singletonList(channelList);
+        //return channelLists;
     }
 
     @Override
     public List<Server> getAllServers() {
         String sql = "select ip, port from bonus_servers where unicast=1 and status=1";
 
-        List<Server> servers = jdbcTemplate.query(sql, new RowMapper<Server>() {
+  /*      List<Server> servers = jdbcTemplate.query(sql, new RowMapper<Server>() {
             @Override
             public Server mapRow(ResultSet resultSet, int i) throws SQLException {
                 Server server = new Server();
@@ -59,7 +67,11 @@ public class ChannelListRepository implements TVRepository {
                 return server;
             }
         });
-
-        return servers;
+*/
+        Server server = new Server();
+        server.setPort("2222");
+        server.setIpChina("192.168.0.1");
+        return Collections.singletonList(server);
+        //return servers;
     }
 }
