@@ -33,65 +33,6 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class VlcTemplateSecurityConfig extends WebSecurityConfigurerAdapter {
 
- /*   @Autowired
-    VlcTemplateUserDetailsService userDetailsService;
-
-    @Autowired
-    TokenAuthenticationManager tokenAuthenticationManager;
- 
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
- 
-*//*
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .addFilterAfter(restTokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .anyRequest().authenticated();
-                //.antMatchers("*//*
-*//**").authenticated();
-    }
-*/
-    
-/*    @Autowired
-    private Config config;*/
-    
-   /* @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
-        jsonView.setPrettyPrint(true);
-        registry.enableContentNegotiation(jsonView);
-        super.configureViewResolvers(registry);
-    }
-    
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
-        registry.addResourceHandler("/static*//**").addResourceLocations("/static/");
-    }*/
-    
-/*    @Bean
-    public DataSource getDataSource() {
-        
-        String url = config.getDbPrefix() + config.getHost() + ":" + config.getPort() + "/" + config.getDbName();
-        
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        
-        dataSource.setDriverClassName(config.getDriverName());
-        dataSource.setUrl(url);
-        dataSource.setUsername(config.getUsername());
-        dataSource.setUsername(config.getPassword());
-        return dataSource;
-    }
-    
-    @Bean
-    public TVRepository tvRepository() {
-        return new ChannelListRepository(getDataSource());
-    }*/
-    
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
@@ -120,25 +61,10 @@ public class VlcTemplateSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 // we don't need CSRF because our token is invulnerable
                 .csrf().disable()
-                
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                
                 // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                
                 .authorizeRequests()
-                //.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                
-                // allow anonymous resource requests
-//                .antMatchers(
-//                        HttpMethod.GET,
-//                        "/",
-//                        "/*.html",
-//                        "/favicon.ico",
-//                        "/**/*.html",
-//                        "/**/*.css",
-//                        "/**/*.js"
-//                ).permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated();
         
@@ -149,13 +75,4 @@ public class VlcTemplateSecurityConfig extends WebSecurityConfigurerAdapter {
         // disable page caching
         httpSecurity.headers().cacheControl();
     }
-    
-    
-  /*  @Bean(name = "restTokenAuthenticationFilter")
-    public TokenAuthenticationFilter restTokenAuthenticationFilter() {
-        TokenAuthenticationFilter restTokenAuthenticationFilter = new TokenAuthenticationFilter();
-        tokenAuthenticationManager.setUserDetailsService(userDetailsService);
-        restTokenAuthenticationFilter.setAuthenticationManager(tokenAuthenticationManager);
-        return restTokenAuthenticationFilter;
-    }*/
 }

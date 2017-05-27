@@ -137,15 +137,6 @@ public class JwtTokenUtil implements Serializable {
         return generateToken(claims);
     }
     
-    public static void main(String[] args) {
-        JwtTokenUtil util = new JwtTokenUtil();
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, "acid0od");
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        String s = util.generateToken(claims);
-        System.out.println(":[" + s + "]");
-    }
-    
     public String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
