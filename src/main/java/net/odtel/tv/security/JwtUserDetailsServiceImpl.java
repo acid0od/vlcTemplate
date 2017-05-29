@@ -7,13 +7,11 @@
  */
 package net.odtel.tv.security;
 
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -23,13 +21,6 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-/*        User user = userRepository.findByUsername(username);
-        
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-        } else {
-            return JwtUserFactory.create(user);
-        }*/
         
         Date date = new Date();
         date.setTime(System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1));

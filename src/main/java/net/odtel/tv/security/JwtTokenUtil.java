@@ -13,42 +13,24 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import net.odtel.tv.configuration.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
 public class JwtTokenUtil implements Serializable {
     
-    private static final long serialVersionUID = -3301605591108950415L;
-    
     public static final String CLAIM_KEY_USERNAME = "sub";
     public static final String CLAIM_KEY_AUDIENCE = "audience";
     public static final String CLAIM_KEY_CREATED = "created";
-    
-    private static final String AUDIENCE_UNKNOWN = "unknown";
-    private static final String AUDIENCE_WEB = "web";
-    private static final String AUDIENCE_MOBILE = "mobile";
-    private static final String AUDIENCE_TABLET = "tablet";
+    private static final long serialVersionUID = -3301605591108950415L;
     
     @Autowired
     private Config config;
-/*
-    @Value("${jwt.secret}")
-    private String secret;
-    
-    //@Value("${jwt.expiration}")
-    private Long expiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365);
-*/
     
     public String getUsernameFromToken(String token) {
         String username;
@@ -116,35 +98,6 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
     
-    private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
-    }
-    
-    private String generateAudience(Device device) {
-        String audience = AUDIENCE_UNKNOWN;
-        if (device.isNormal()) {
-            audience = AUDIENCE_WEB;
-        } else if (device.isTablet()) {
-            audience = AUDIENCE_TABLET;
-        } else if (device.isMobile()) {
-            audience = AUDIENCE_MOBILE;
-        }
-        return audience;
-    }
-    
-    private Boolean ignoreTokenExpiration(String token) {
-        String audience = getAudienceFromToken(token);
-        return (AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience));
-    }
-    
-    public String generateToken(UserDetails userDetails, Device device) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-        claims.put(CLAIM_KEY_AUDIENCE, generateAudience(device));
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
-    }
-    
     public String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -153,35 +106,13 @@ public class JwtTokenUtil implements Serializable {
                 .compact();
     }
     
-    /*public Boolean canTokenBeRefreshed(String tokennew Date() > expiration, Date lastPasswordReset) {
-        final Date created = getCreatedDateFromToken(token);
-        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
-                && (!isTokenExpired(token) || ignoreTokenExpiration(token));
-    }*/
-    
-    public String refreshToken(String token) {
-        String refreshedToken;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            claims.put(CLAIM_KEY_CREATED, new Date());
-            refreshedToken = generateToken(claims);
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
-    }
-    
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getCreatedDateFromToken(token);
-        //final Date expiration =
         boolean after = getExpirationDateFromToken(token).after(new Date());
-    
-        return (
-                username.equals(user.getUsername())
-                        && !isTokenExpired(token)
-                        && after);
-                        //&& !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+        
+        return username.equals(user.getUsername())
+                && !isTokenExpired(token)
+                && after;
     }
 }
