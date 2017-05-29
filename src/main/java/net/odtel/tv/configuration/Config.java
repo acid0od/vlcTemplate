@@ -10,4 +10,9 @@ public interface Config {
     String getDriverName();
     String getUsername();
     String getPassword();
+    String getJWTHeader();
+    String getJWTSecret();
+    String getJWTExpiration();
+    String getTitle();
+    String getPrefix();
 }

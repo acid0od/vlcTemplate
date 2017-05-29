@@ -23,4 +23,16 @@ public class ConfigImpl implements Config {
     private String username;
     @Value("${vlcTemplate.db.password}")
     private String password;
+    @Value("${jwt.header}")
+    private String jWTHeader;
+    @Value("${jwt.secret}")
+    private String jWTSecret;
+    @Value("${jwt.expiration}")
+    private String jWTExpiration;
+    
+    @Value("${vlcTemplate.m3u.title}")
+    private String title;
+    
+    @Value("${vlcTemplate.m3u.prefix}")
+    private String prefix;
 }

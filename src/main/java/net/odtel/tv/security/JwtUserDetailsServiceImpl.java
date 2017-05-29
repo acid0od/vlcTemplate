@@ -7,6 +7,7 @@
  */
 package net.odtel.tv.security;
 
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,7 +33,14 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         
         Date date = new Date();
         date.setTime(System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1));
-        return new JwtUser(0L, "acid0od", "firstname", "lastname", "email@email", "password",
-                Collections.emptyList(), true, date);
+        if (username.equals("acid0od")) {
+            return new JwtUser(0L, "acid0od", "firstname", "lastname", "email@email", "password",
+                    Collections.emptyList(), true, date);
+        } else if (username.equals("serbin")) {
+            return new JwtUser(0L, "serbin", "firstname", "lastname", "email@email", "password",
+                    Collections.emptyList(), true, date);
+        } else {
+            throw new UsernameNotFoundException("UsernameNotFoundException userName=" + username);
+        }
     }
 }

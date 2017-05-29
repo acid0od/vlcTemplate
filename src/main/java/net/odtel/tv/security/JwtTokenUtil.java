@@ -10,11 +10,15 @@ package net.odtel.tv.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+import net.odtel.tv.configuration.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Slf4j
 public class JwtTokenUtil implements Serializable {
     
     private static final long serialVersionUID = -3301605591108950415L;
@@ -35,12 +40,15 @@ public class JwtTokenUtil implements Serializable {
     private static final String AUDIENCE_MOBILE = "mobile";
     private static final String AUDIENCE_TABLET = "tablet";
     
-    
+    @Autowired
+    private Config config;
+/*
     @Value("${jwt.secret}")
     private String secret;
     
     //@Value("${jwt.expiration}")
     private Long expiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365);
+*/
     
     public String getUsernameFromToken(String token) {
         String username;
@@ -90,7 +98,7 @@ public class JwtTokenUtil implements Serializable {
         Claims claims;
         try {
             claims = Jwts.parser()
-                    .setSigningKey(secret)
+                    .setSigningKey(config.getJWTSecret())
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -100,7 +108,7 @@ public class JwtTokenUtil implements Serializable {
     }
     
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
+        return new Date(System.currentTimeMillis() + Integer.valueOf(config.getJWTExpiration()) * 1000);
     }
     
     private Boolean isTokenExpired(String token) {
@@ -141,15 +149,15 @@ public class JwtTokenUtil implements Serializable {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS512, config.getJWTSecret())
                 .compact();
     }
     
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
+    /*public Boolean canTokenBeRefreshed(String tokennew Date() > expiration, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
         return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
                 && (!isTokenExpired(token) || ignoreTokenExpiration(token));
-    }
+    }*/
     
     public String refreshToken(String token) {
         String refreshedToken;
@@ -167,10 +175,13 @@ public class JwtTokenUtil implements Serializable {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
+        //final Date expiration =
+        boolean after = getExpirationDateFromToken(token).after(new Date());
+    
         return (
                 username.equals(user.getUsername())
-                        && !isTokenExpired(token));
+                        && !isTokenExpired(token)
+                        && after);
                         //&& !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
     }
 }

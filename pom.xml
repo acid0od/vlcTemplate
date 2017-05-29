@@ -24,6 +24,8 @@
         <spring-security-config.version>4.2.2.RELEASE</spring-security-config.version>
         <jjwt.version>0.7.0</jjwt.version>
         <spring-mobile-device.version>2.0.0.M1</spring-mobile-device.version>
+        <slf4j-api.version>1.7.25</slf4j-api.version>
+        <mysql-connector-java.version>5.1.41</mysql-connector-java.version>
     </properties>
 
     <dependencies>
@@ -41,12 +43,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -99,13 +95,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <version>${slf4j-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.41</version>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
 
 

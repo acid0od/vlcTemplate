@@ -1,6 +1,7 @@
 package net.odtel.tv.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.odtel.tv.configuration.Config;
 import net.odtel.tv.model.ChannelList;
 import net.odtel.tv.model.Server;
 import net.odtel.tv.model.UserAuth;
@@ -20,10 +21,13 @@ public class TvProgrammeService implements TvService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     
+    @Autowired
+    private Config config;
+    
     @Override
     public TokenResponse getToken(UserAuth userAuth) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(jwtTokenUtil.CLAIM_KEY_USERNAME, "acid0od");
+        claims.put(jwtTokenUtil.CLAIM_KEY_USERNAME, userAuth.getUserName());
         claims.put(jwtTokenUtil.CLAIM_KEY_CREATED, new Date());
         return new TokenResponse(jwtTokenUtil.generateToken(claims));
     }
@@ -36,7 +40,8 @@ public class TvProgrammeService implements TvService {
 
         List<ChannelList> all = tvRepository.getAllChannels();
         List<Server> allServers = tvRepository.getAllServers();
-        buffer.append("#EXTM3U url-tvg=\"http://61.50.196.42/iptv/jtv.zip\" deinterlace=1 tvg-shift=-1\n");
+        //buffer.append("#EXTM3U url-tvg=\"http://61.50.196.42/iptv/jtv.zip\" deinterlace=1 tvg-shift=-1\n");
+        buffer.append(config.getTitle());
 
         for (ChannelList channelList : all) {
             Server server = allServers.get(randomGenerator.nextInt(allServers.size()));
@@ -47,10 +52,14 @@ public class TvProgrammeService implements TvService {
                     .append(channelList.getName())
                     .append("\n");
 
-            buffer.append("http://195.138.161.30:9896/http/").append(server.getIpChina())
+    /*        buffer.append("http://195.138.161.30:9896/http/").append(server.getIpChina())
                     .append(":")
                     .append(server.getPort())
                     .append("/udp/")
+                    .append(channelList.getStreamAddress())
+                    .append("\n");*/
+    
+            buffer.append(config.getPrefix()).append("/")
                     .append(channelList.getStreamAddress())
                     .append("\n");
         }

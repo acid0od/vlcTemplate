@@ -8,3 +8,8 @@ vlcTemplate.db.password = password
 
 jwt.header = Bearer
 jwt.secret = secret012345678
+
+jwt.expiration = 604800
+
+vlcTemplate.m3u.title = #EXTM3U url-tvg="http://ip.com.ua/iptv/jtv.zip" deinterlace=1 tvg-shift=-1
+vlcTemplate.m3u.prefix = http://localhost:9896/http/ip.provader-tv.com:4004/udp/
