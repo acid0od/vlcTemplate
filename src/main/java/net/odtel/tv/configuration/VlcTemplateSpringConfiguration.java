@@ -51,7 +51,7 @@ public class VlcTemplateSpringConfiguration extends WebMvcConfigurerAdapter {
         dataSource.setDriverClassName(config.getDriverName());
         dataSource.setUrl(url);
         dataSource.setUsername(config.getUsername());
-        dataSource.setUsername(config.getPassword());
+        dataSource.setPassword(config.getPassword());
         return dataSource;
     }
     
